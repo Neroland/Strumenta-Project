@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'view.dart';
@@ -18,39 +19,37 @@ class _Editor extends State<Editor> {
   late DocumentProvider doc;
   @override
   void initState() {
+    super.initState();
+    dirFinder();
+  }
+
+  void dirFinder() async {
     doc = DocumentProvider();
-
-    // if (defaultTargetPlatform == TargetPlatform.iOS ||
-    //     defaultTargetPlatform == TargetPlatform.android) {
-    //   // Some android/ios specific code
-    // } else if (defaultTargetPlatform == TargetPlatform.linux ||
-    //     defaultTargetPlatform == TargetPlatform.macOS ||
-    //     defaultTargetPlatform == TargetPlatform.windows) {
-    //   // Some desktop specific code there
-    // } else {
-    //   // Some web specific code there
-    // }
-
     if (!kIsWeb) {
-      print("Test");
       if (defaultTargetPlatform == TargetPlatform.windows) {
-        if (File(widget.path).exists() == true) {
-          doc.openFile(widget.path);
+        Directory appDocDir = await getApplicationDocumentsDirectory();
+        String appDocPath = appDocDir.path + r'\FromDonutDev.js';
+        if (File(appDocPath).exists() == true) {
+          doc.openFile(appDocPath);
         } else {
-          File(widget.path);
-          doc.openFile(widget.path);
+          File(appDocPath);
+          doc.openFile(appDocPath);
         }
       }
     }
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(create: (context) => doc),
-      Provider(create: (context) => Highlighter())
-    ], child: InputListener(child: View()));
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => doc),
+        Provider(create: (context) => Highlighter())
+      ],
+      child: InputListener(
+        child: View(),
+      ),
+    );
   }
 }
 
@@ -67,7 +66,7 @@ void main() async {
       debugShowCheckedModeBanner: false,
       theme: themeData,
       home: Scaffold(
-        body: Editor(path: './tests/temp.js'),
+        body: Editor(path: r'\FromDonutDev.js'),
       ),
     ),
   );

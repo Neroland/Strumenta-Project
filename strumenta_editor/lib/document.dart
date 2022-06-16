@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Cursor {
   Cursor(
@@ -48,8 +50,10 @@ class Document {
 
   Future<bool> openFile(String path) async {
     lines = <String>[''];
-    docPath = path;
-    File f = await File(docPath);
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path + r'\FromDonutDev.js';
+    //docPath = path;
+    File f = await File(appDocPath);
     await f
         .openRead()
         .map(utf8.decode)
@@ -69,6 +73,7 @@ class Document {
       content += l + '\n';
     });
     f.writeAsString(content);
+
     return true;
   }
 

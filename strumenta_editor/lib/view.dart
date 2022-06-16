@@ -40,9 +40,10 @@ class ViewLine extends StatelessWidget {
           padding: EdgeInsets.only(left: gutterWidth),
           child: RichText(text: TextSpan(children: spans), softWrap: true)),
       Container(
-          width: gutterWidth,
-          alignment: Alignment.centerRight,
-          child: Text('${lineNumber + 1} ', style: gutterStyle)),
+        width: gutterWidth,
+        alignment: Alignment.centerRight,
+        child: Text('${lineNumber + 1} ', style: gutterStyle),
+      ),
     ]);
   }
 }
